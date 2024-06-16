@@ -1,0 +1,17 @@
+{
+    "name": "skills/wc-halkbank-payment-gateway",
+    "description": "WooCommerce Payment Gateway through HalkBank",
+    "type": "wordpress-plugin",
+    "autoload": {
+        "psr-4": {
+            "Skills\\WcHalkbankPaymentGateway\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "StYankov",
+            "email": "st.yankov00@gmail.com"
+        }
+    ],
+    "require": {}
+}
