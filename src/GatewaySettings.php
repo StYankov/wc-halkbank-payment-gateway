@@ -32,6 +32,10 @@ class GatewaySettings {
         return self::get_setting( 'currencyCode' );
     }
 
+    public static function get_failed_payment_message() {
+        return self::get_setting( 'failed_payment_message' );
+    }
+
     /**
      * @param string $key The key of the setting to retrieve
      * 

@@ -15,6 +15,7 @@ class WCHalkBankPaymentGateway extends \WC_Payment_Gateway {
 
 		add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, [ $this, 'process_admin_options' ] );
         add_action( 'woocommerce_receipt_' . $this->id, [ $this, 'render_payment_form' ] );
+        add_action( 'wp_head', [ $this, 'failed_payment_notice' ] );
     }
 
     protected function setup_properties() {
@@ -45,6 +46,12 @@ class WCHalkBankPaymentGateway extends \WC_Payment_Gateway {
                 'type'        => 'textarea',
                 'description' => __( 'This controls the description which the user sees during checkout.', 'woocommerce' ),
                 'default'     => __( 'Pay using our custom payment gateway.', 'woocommerce' ),
+            ],
+            'failed_payment_message' => [
+                'title'       => __( 'Failed Payment Message', 'wc-halkbank-payment-gateway' ),
+                'type'        => 'textarea',
+                'description' => __( 'This message will be displayed to the user when the payment fails.', 'wc-halkbank-payment-gateway' ),
+                'default'     => __( 'Payment failed. Try again', 'wc-halkbank-payment-gateway' ),
             ],
             'test_mode'   => [
                 'title'       => __( 'Test Mode', 'wc-halkbank-payment-gateway' ),
@@ -93,5 +100,23 @@ class WCHalkBankPaymentGateway extends \WC_Payment_Gateway {
      */
     public function render_payment_form( $order_id ) {
         PaymentService::render_payment_form( wc_get_order( $order_id ) );
+    }
+
+    public function failed_payment_notice() {
+        if( false === is_checkout() ) {
+            return;
+        }
+
+        $order_id = get_query_var( 'order-pay' );
+
+        if( ! $order_id ) {
+            return;
+        }
+
+        $order = wc_get_order( $order_id );
+        
+        if( $order && $order->get_payment_method() === GatewaySettings::get_method_id() && ! empty( $_GET['payment-failed'] ) ) {
+            wc_add_notice( GatewaySettings::get_failed_payment_message(), 'error' );
+        }
     }
 }

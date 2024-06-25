@@ -18,8 +18,6 @@ class PaymentService {
      */
     public static function render_payment_form( \WC_Order $order ) {
         $data = self::get_payload_data( $order );
-
-        $order->add_order_note( json_encode( $data ) );
         ?>
 
             <form name="pay_form" method="POST" action="<?php echo PaymentService::get_3d_post_url(); ?>">
@@ -41,7 +39,7 @@ class PaymentService {
             'clientid'      => GatewaySettings::get_client_id(),
             'amount'        => $order->get_total( 'edit' ),
             'okurl'         => self::get_confirm_url(),
-            'failUrl'       => wc_get_checkout_url(),
+            'failUrl'       => self::get_fail_url(),
             'TranType'      => 'Auth',
             'callbackUrl'   => rest_url( 'wc-halkbank-payment-gateway/v1/callback' ),
             'currency'      => GatewaySettings::get_currency_code(),
@@ -100,6 +98,10 @@ class PaymentService {
 
     public static function get_confirm_url() {
         return home_url( 'halkbank/payment/complete' );
+    }
+
+    public static function get_fail_url() {
+        return home_url( 'halkbank/payment/failed' );
     }
 
     /**

@@ -18,6 +18,7 @@ class Plugin {
         new WooCommerce();
         new CallbackRoute();
         new ConfirmRoute();
+        new FailRoute();
     }
 
     public static function initialize() {
