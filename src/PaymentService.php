@@ -10,7 +10,7 @@ class PaymentService {
             return 'https://torus-stage-halkbankmacedonia.asseco-see.com.tr/fim/est3Dgate';
         }
 
-        return '';
+        return 'https://epay.halkbank.mk/fim/est3Dgate';
     }
 
     /**

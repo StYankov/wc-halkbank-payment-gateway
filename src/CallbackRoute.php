@@ -16,7 +16,13 @@ class CallbackRoute {
     }
 
     public function callback( \WP_REST_Request $request ) {
-        PaymentService::confirm_payment( wc_get_order( $request->get_param( 'orderId' ) ) );
+        $order = wc_get_order( $request->get_param( 'orderId' ) );
+
+        if( empty( $order ) ) {
+            return false;
+        }
+
+        $order->add_order_note( json_encode( $request->get_params() ) );
         
         return true;
     }

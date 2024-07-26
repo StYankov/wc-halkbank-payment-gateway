@@ -50,6 +50,8 @@ class ConfirmRoute {
             exit;
         }
 
+        $order->add_order_note( json_encode( $_POST ) );
+
         if( PaymentService::confirm_payment( $order ) ) {
             wp_redirect( $order->get_checkout_order_received_url() );
             exit;
