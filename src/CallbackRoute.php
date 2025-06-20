@@ -22,8 +22,14 @@ class CallbackRoute {
             return false;
         }
 
-        $order->add_order_note( json_encode( $request->get_params() ) );
-        
-        return true;
+        if( $request->get_param( 'ProcReturnCode' ) !== '00' ) {
+            return false;
+        }
+
+        if( ! $order->is_paid() ) {
+            $order->payment_complete( $request->get_param( 'TransId' ) );
+        }
+
+        return 'response=approved';
     }
 }
