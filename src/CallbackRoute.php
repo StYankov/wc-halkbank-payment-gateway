@@ -2,6 +2,8 @@
 
 namespace Skills\WcHalkbankPaymentGateway;
 
+use WP_REST_Response;
+
 class CallbackRoute {
     public function __construct() {
         add_action( 'rest_api_init', [ $this, 'register_route' ] );
@@ -30,6 +32,10 @@ class CallbackRoute {
             $order->payment_complete( $request->get_param( 'TransId' ) );
         }
 
-        return 'response=approved';
+        $response = new WP_REST_Response( 'response=approved' );
+
+        $response->header( 'Content-Type', 'text/plain' );
+
+        return $response;
     }
 }
